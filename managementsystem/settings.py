@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1y^xnx90y$08axyc#+yl^dy!74(3ulc*!%b&d0!m&v#y&&(m+&'
+SECRET_KEY = os.environ['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'authentication',
+    'books'
 ]
 
 MIDDLEWARE = [
@@ -51,10 +56,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'managementsystem.urls'
 
+# this a the extended user model
+AUTH_USER_MODEL = 'authentication.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,13 +80,38 @@ WSGI_APPLICATION = 'managementsystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# this is the data base set up basically when it hosted online we use a databser url which is always provided by the deployment server
+# else we use the local databse on ur working machine
+DATABASES = dict()
+DATABASE_URL = os.environ.get('DATABASE_URL',None)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if not DATABASE_URL:
+    DATABASES = {
+        "default": {
+            "ENGINE": 'django.db.backends.postgresql',
+            "NAME": os.environ.get("DB_NAME"),
+            "USER":  os.environ.get("DB_USER"),
+            "PASSWORD":  os.environ.get("DB_PASS"),
+            "HOST":  os.environ.get("DB_HOST"),
+            "PORT":  os.environ.get("DB_PORT"),
+            "CONN_MAX_AGE": 60,
+        }
     }
-}
+else:
+    db_info = urlparse(DATABASE_URL)
+    DATABASES = {
+        "default": {
+            "ENGINE": 'django.db.backends.postgresql',
+            "NAME": db_info.path[1:],
+            "USER": db_info.username,
+            "PASSWORD": db_info.password,
+            "HOST": db_info.hostname,
+            "PORT": db_info.port,
+            "OPTIONS": {"sslmode": "require"},
+            "CONN_MAX_AGE": 60,
+        }
+    }
+
 
 
 # Password validation
