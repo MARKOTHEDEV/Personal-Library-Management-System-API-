@@ -9,5 +9,6 @@ router.register('create-user',views.RegisterUserViewset,basename='create-user')
 
 
 urlpatterns =[
-
+    path('login/',views.LoginView.as_view(),name='login'),
+     path( "refresh/token/",views.CustomTokenRefreshView.as_view(),name="token-refresh",)
 ] +router.urls

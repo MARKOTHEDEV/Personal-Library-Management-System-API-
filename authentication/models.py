@@ -11,6 +11,7 @@ class UserManager(BaseUserManager):
             **other_fields
         )
         user.set_password(password)
+        user.is_active=True
         user.save()
         return user
     def create_superuser(self, email, password, **other_fields):
