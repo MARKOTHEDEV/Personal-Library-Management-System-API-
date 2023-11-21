@@ -3,7 +3,7 @@ from . import views
 
 route = DefaultRouter()
 
-route.register('',views.UserManageBooksViewset)
+route.register('',views.UserManageBooksViewset,basename='managebook')
 
 
 
