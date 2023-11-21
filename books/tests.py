@@ -81,3 +81,44 @@ class TestSetUpAuthenticatedEndPoint(APITestCase):
         self.book_url_update = reverse('managebook-detail',args=[77])
         update_resp = self.client.patch(self.book_url_update,)
         self.assertEqual(update_resp.status_code,status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+
+
+class TestSetUpUnAuthenticatedEndPoint(APITestCase):
+    'this user is not authenticated'
+    
+    def setUp(self) -> None:
+        self.book ={
+            "title": "hello world",
+            "author": "wrendfc",
+            "isbn": "9780140328721d",
+            "publication_date": "2023-11-21"
+        }
+
+        
+        self.book_url_create = reverse('managebook-list')
+        self.book_url_list = reverse('managebook-list')
+        # self.book_url_patch = reverse('managebook-patch')
+        return super().setUp()
+    
+
+    def tearDown(self) -> None:
+        return super().tearDown()
+    
+
+    
+
+    def test_creation_of_book_empty_request(self):
+        resp = self.client.post(self.book_url_create,)
+        self.assertEqual(resp.status_code,status.HTTP_401_UNAUTHORIZED)
+
+    def test_creation_of_book(self):
+        resp = self.client.post(self.book_url_create,data=self.book)
+        self.assertEqual(resp.status_code,status.HTTP_401_UNAUTHORIZED)
+
+
