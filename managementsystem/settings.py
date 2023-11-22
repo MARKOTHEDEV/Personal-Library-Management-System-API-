@@ -46,11 +46,15 @@ INSTALLED_APPS = [
 
     # third party apps
     'drf_yasg',
+    "corsheaders",
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+      "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -194,3 +198,34 @@ SWAGGER_SETTINGS = {
         'api_key':{'type':'apiKey','name':'Authorization','in':'header'}
     }
 }
+
+
+
+
+
+
+CORS_ALLOWED_ORIGINS = os.environ['trusted_urls'].split(',')
+
+SITE_URL = os.environ['SITE_URL']
+
+CORS_ALLOW_METHODS = [
+'DELETE',
+'GET',
+'OPTIONS',
+'PATCH',
+'POST',
+'PUT',
+]
+CORS_ALLOW_HEADERS = [
+'accept',
+'accept-encoding',
+'authorization',
+'content-type',
+'dnt',
+'origin',
+'user-agent',
+'x-csrftoken',
+'x-requested-with',
+]
+
+CSRF_TRUSTED_ORIGINS =CORS_ALLOWED_ORIGINS
