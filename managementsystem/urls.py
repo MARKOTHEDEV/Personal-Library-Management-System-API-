@@ -14,9 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include,re_path
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework.permissions import AllowAny 
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Personal Library Management System API",
+        default_version='v1',
+        description='''
+evelop a RESTful API using Django and Django REST framework that allows users to manage their personal library of books. The system should also integrate with a third-party service to retrieve book information.
+''',
+        contact=openapi.Contact(email="admin@gmail.com"), 
+    ),
+    public=True,
+    permission_classes=[AllowAny]
+    )
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/',include('authentication.urls'),name='auth'),
-    path('book/',include('books.urls'))
+    path('book/',include('books.urls')),
+
+    
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

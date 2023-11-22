@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'authentication',
-    'books'
+    'books',
+
+    # third party apps
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -161,6 +164,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    "DEFAULT_PERMISSION_CLASSES":[
+        'rest_framework.permissions.IsAuthenticated'
+    ],
     "EXCEPTION_HANDLER": "utils.exception.custom_exception_handler",
     'DEFAULT_FILTER_BACKENDS': (
             'django_filters.rest_framework.DjangoFilterBackend',
@@ -175,4 +181,16 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH':False,
+    'is_authenticated':False,
+    'is_superuser':False,
+    'api_key': os.environ['secret_key'],
+    'SECURITY_DEFINITIONS':{
+        'api_key':{'type':'apiKey','name':'Authorization','in':'header'}
+    }
 }
