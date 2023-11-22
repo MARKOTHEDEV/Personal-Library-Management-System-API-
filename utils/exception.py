@@ -111,7 +111,7 @@ def custom_exception_handler(exc, context):
 
 class CustomValidation(APIException):
     """
-    custom error validation
+    custom error validation this was created so i can easyly call validation error anywhere 
     """
 
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
