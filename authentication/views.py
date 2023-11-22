@@ -8,10 +8,12 @@ from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.settings import api_settings
 from rest_framework.exceptions import AuthenticationFailed
 class RegisterUserViewset(viewsets.ViewSet):
+    'this endpoint helps to create user'
     permission_classes = []
     serializer_class = serializer.RegisterUserSerializers
 
     def create(self,request,*args,**kwargs):
+        'this is aka the post request that receive data and create the  user'
         serialized = self.serializer_class(data=request.data)
         serialized.is_valid(raise_exception=True)
         data = serialized.save()
@@ -21,6 +23,7 @@ class RegisterUserViewset(viewsets.ViewSet):
 
 
 class LoginView(TokenObtainPairView):
+    'so we using the TokenObtainPairView cls to handle login'
     authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = serializer.LoginSerializer
@@ -29,6 +32,7 @@ class LoginView(TokenObtainPairView):
 
 
 class CustomTokenRefreshView(TokenRefreshView):
+    'this is the refresh token api'
     authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = serializer.CustomTokenRefreshSerializer

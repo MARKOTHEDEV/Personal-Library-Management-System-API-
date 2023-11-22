@@ -28,6 +28,7 @@ def response_data(
 
 
 def Res(status: int, message: str, data: Union[None, Dict, List] = None):
+    'this is a helper class that helps return structured  response style to the frontend'
     resp = response_data(status=status,data=data,message=message)
     return Response(data=resp,status=status)    
 

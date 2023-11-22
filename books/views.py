@@ -19,6 +19,7 @@ class UserManageBooksViewset(viewsets.ModelViewSet):
         'this function just help filter the list to get only logged in user data'
         return super().get_queryset().filter(user=self.request.user)
     def perform_create(self, serializer):
+        'this function just help me add the logged in user as the owner of the instance'
         serializer.save(user = self.request.user)
         return super().perform_create(serializer)
     
